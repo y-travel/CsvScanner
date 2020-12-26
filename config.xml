@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+    <CsvFiles Path="/home/mta/tefas/csv/**/*.csv" />
+    <PresetFiles Path="./data/*.xml" />
+    <Server Port="3030" />
+</Config>
