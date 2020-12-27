@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { FileService } from './file.service';
 @Controller('/files')
 export class FilesController {
-	constructor(private readonly service: FilesService ) { }
+	constructor(private readonly service: FileService ) { }
 
 	@Get('/')
 	getItemsInBriefCase() {

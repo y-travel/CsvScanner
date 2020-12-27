@@ -6,7 +6,14 @@ import { globFiles } from '../../lib/utils';
 import * as uuid from 'uuid'
  
 @Injectable()
-export class PresetsService {
+export class JobService {
+	getJobs() {
+	 }
+	deleteJob(entity: any) {
+ 	}
+	createJob(entity: any) {
+		 
+ 	}
 	config: Config;
 	idByFilePath: {};
 	fileDataById:{};

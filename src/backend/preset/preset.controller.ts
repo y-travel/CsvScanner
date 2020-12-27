@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { PresetsService } from './presets.service';
+import { PresetService } from './preset.service';
 
 @Controller('/presets')
 export class PresetController {
-	constructor(private readonly service: PresetsService) { }
+	constructor(private readonly service: PresetService) { }
 
 	 
 	@Get('/')

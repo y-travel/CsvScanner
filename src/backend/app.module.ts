@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import * as Home from './home';
-import * as Files from './files';
-import * as Preset from './presets';
+import * as home from './home';
+import * as files from './file';
+import * as preset from './preset';
+import * as jobs from './job';
 
 @Module({
   imports: [],
-  controllers: [Home.AppController ,Files.FilesController ,Preset.PresetController ],
-  providers: [Home.AppService,Files.FilesService,Preset.PresetsService]
+  controllers: [home.AppController ,files.FilesController ,preset.PresetController,jobs.JobsController ],
+  providers: [home.AppService,files.FileService,preset.PresetService,jobs.JobService]
 })
 export class AppModule {}

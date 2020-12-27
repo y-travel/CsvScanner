@@ -26,9 +26,10 @@ export class Job {
    }
    start() {
       this.timerId = setInterval(this.updateIndexFile.bind(this), 1000);
-      this.csvFile.on('fields',fields=>this.updateIndexFile.bind(this));
+      this.csvFile.on('fields', this.updateIndexFile.bind(this));
       this.csvFile.on('data',({item,lineIndex,filePosition})=>{
-          
+         
+         this.preset.processRow(item);          
       });
 
    }

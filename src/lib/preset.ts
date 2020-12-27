@@ -1,6 +1,9 @@
 import { readFile } from 'fs-extra'
 import { parseXmlString,Element} from 'libxmljs' 
 export class Preset{
+    processRow(item: any):CategoryPreset[] {
+    return this.categories.filter( cat=>cat.checkItem(item));
+    }
     categories:CategoryPreset[];
     /**
      *
@@ -13,7 +16,8 @@ export class Preset{
         const doc=parseXmlString(contents);
         this.categories =  Array.from(  doc.find('//Category')).map(
             elm=>new CategoryPreset(elm)
-        ) 
+        ); 
+        this.categories.unshift(new CategoryPresetForAllData());
     }
 }
 class CategoryPreset{
@@ -26,7 +30,8 @@ class CategoryPreset{
             const attr=elm.attr(attributeName);
             return attr ? attr.value() : '';
         }
-         this.attributes={   
+        if(!elm) return;
+          this.attributes={   
              name:getValue('Name'),
              icon: getValue('Icon'),
              color: getValue('Color'),
@@ -37,8 +42,21 @@ class CategoryPreset{
      
     canIndex({lineIndex}){
         return true;
+    }
+    public checkItem(item){
+
     }   
 }
 
-class CategoryPresetForAllData{
+class CategoryPresetForAllData extends CategoryPreset {
+    /**
+     *
+     */
+    constructor() {
+        super(null);
+
+    }
+    public checkItem(item){
+        return true;
+    }
 }

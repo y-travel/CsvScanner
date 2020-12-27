@@ -5,7 +5,7 @@ import { detectFileEncoding } from '../../lib/text-encoding';
 import { globFiles } from '../../lib/utils';
 import * as uuid from 'uuid'
 import { stat } from 'fs-extra';
-import * as humanSize from 'human-size'
+import * as humanSize from 'src/backend/file/node_modules/human-size'
 @Injectable()
 export class AppService {
 	config: Config;
