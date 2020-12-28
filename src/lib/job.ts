@@ -1,7 +1,7 @@
 import { writeFile } from "fs/promises";
 import { stringify } from "hjson";
 import { CsvFile } from "./csv-file";
-import { Preset } from "./lib/preset";
+import { Preset } from "./preset";
 
 export class Job {
    timerId: NodeJS.Timeout;

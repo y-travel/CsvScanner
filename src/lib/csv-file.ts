@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { createReadStream } from 'fs';
-import * as  readline from 'readline';
-import { TextEncoding } from './lib/text-encoding';
+import { TextEncoding } from './text-encoding';
 
 export class CsvFile extends EventEmitter {
     fieldNames: string[];
@@ -9,17 +8,17 @@ export class CsvFile extends EventEmitter {
     /**
      *
      */
-    constructor(public textEncoding: TextEncoding) {
+    constructor( ) {
         super()
         this.fieldNames = null as any;
         this.initalFilePosition = 0;
     }
-    async startReadLines(filePath: string) {
+    async startReadLines(filePath: string,textEncoding: TextEncoding) {
         let lineIndex = 0;
         let filePosition = this.initalFilePosition;
         const fileStream = createReadStream(filePath, { start: filePosition });
-        const scanner = this.textEncoding.openLineScanner(fileStream);
-        const newLineSize = this.textEncoding.getNewLineSize();
+        const scanner = textEncoding.openLineScanner(fileStream);
+        const newLineSize = textEncoding.getNewLineSize();
         try {
             for await (const line of scanner) {
                 if (!this.fieldNames) {
@@ -38,7 +37,7 @@ export class CsvFile extends EventEmitter {
                     }
                     this.emit('data', {item,line,parts,filePosition,lineIndex})
                 }
-                filePosition += this.textEncoding.computeStringSize(line) + newLineSize;
+                filePosition +=   textEncoding.computeStringSize(line) + newLineSize;
                 lineIndex++;
             }
             this.emit('end', {totalLines: lineIndex, filePosition,fields:this.fieldNames});
