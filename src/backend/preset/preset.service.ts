@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as path from 'path';
 import { Config } from '../../lib/config';
  
-import { globFiles } from '../../lib/utils';
+import { globFiles,Preset } from '../../lib';
 import * as uuid from 'uuid'
  
 @Injectable()
@@ -22,7 +22,7 @@ export class PresetService {
 	accquireFileId(filePath) {
 		const id = this.idByFilePath[filePath];
 		if (id) return id;
-		this.idByFilePath[filePath] = uuid.v1();
+		this.idByFilePath[filePath] = uuid.v4();
 		return this.idByFilePath[filePath];
 	}
 	async getFiles() {
@@ -30,6 +30,8 @@ export class PresetService {
 		return Promise.all(files.map(async filePath => {
 			const id = this.accquireFileId(filePath);
 			const name = path.basename(filePath);
+			const preset=new Preset();
+			await preset.loadFromFile(filePath);
 			this.fileDataById[id]={ id,    filePath,      name };
 			return this.fileDataById[id];
 		}));
