@@ -13,3 +13,7 @@ const commandHandler = cli[commandName || 'server'];
 if (!commandHandler) throw new Error(`Command:${commandName} not found in csv-scanner`);
 commandHandler(argv);
 
+process.on('unhandledRejection', (error, promise) => {
+  console.log(' Oh Lord! We forgot to handle a promise rejection here: ', promise);
+  console.log(' The error was: ', error );
+});
