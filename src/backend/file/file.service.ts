@@ -25,7 +25,7 @@ export class FileService {
 	accquireFileId(filePath) {
 		const id = this.idByFilePath[filePath];
 		if (id) return id;
-		this.idByFilePath[filePath] = uuid.v1();
+		this.idByFilePath[filePath] = uuid.v4();
 		return this.idByFilePath[filePath];
 	}
 	async getFiles() {
