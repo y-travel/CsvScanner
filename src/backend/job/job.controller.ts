@@ -24,7 +24,7 @@ export class JobsController {
 	async createJob(@Body() entity: any) {
 		const file = this.fileService.getFile(entity.fileId);
 		const preset = this.presetService.getFile(entity.presetId);
-		return this.service.createJob(entity, file,preset);
+		return this.service.createJob(entity, file.filePath,preset.filePath);
 	}
 	@Delete()
 	deleteJob(@Param('id') id: string) {
