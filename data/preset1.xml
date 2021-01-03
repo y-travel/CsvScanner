@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Preset>
     <Columns count="12" fields="" />
-    <Categodry Name="Error1" icon="warning" color="red">
+    <Category Name="Error1" icon="warning" color="red" Limit="100">
     <!--
         eq : Equal
         lt : Less Than or Equal
@@ -12,7 +12,12 @@
         <Rule sourceField="amount" functionName="lte" argv="2"    />
     </Category> 
     <Category Name="Important">
-        <Rule sourceField="amount" functionName="lte"    />
+        <Rule sourceField="TRN_DEBIT_AMNT" functionName="gte" argv="1_000_000_000"   />
+    <!--    <Rule sourceField="TRN_DEBIT_AMNT" functionName="lte" argv="1_000"   />
+        -->
+        <Rule sourceField="IBAN" functionName="checkIBAN"    />
+        <Rule sourceField="accountNo" functionName="regEx"   />
+   
     </Category> 
 </Preset>
     

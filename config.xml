@@ -2,5 +2,7 @@
 <Config>
     <CsvFiles Path="/home/mta/tefas/csv/**/*.csv" />
     <PresetFiles Path="./data/*.xml" />
+    <JobFiles Path="./jobs/**/*.json" />
+    
     <Server Port="3030" />
 </Config>
