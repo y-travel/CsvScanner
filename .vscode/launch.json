@@ -6,8 +6,8 @@
         "type": "node",
         "request": "launch",
         "runtimeExecutable": "node",
-        "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
-  
+        "runtimeArgs": ["--nolazy","--report-uncaught-exception","--report-on-signal","--report-filename=./report.json", "-r", "ts-node/register"],
+        "smartStep": true,
         "args": ["src/main.ts"],
         
         "cwd": "${workspaceRoot}",
