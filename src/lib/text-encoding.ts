@@ -115,14 +115,26 @@ const computeScoreByTextEnc=async (filePath,[enc, TextEncoding]) => {
         }
         return {enc, totalScore};
     }
+    catch(exc){
+        console.log({exc});
+    }
     finally {
         rl.close();
         fileStream.close();
     }
 };
 export async function detectFileEncoding(filePath) {
+    let highestScorePair={enc:null,totalScore:0};
+    for(const pair of Object.entries(  supportedTextEncodings)){
+        const result=await computeScoreByTextEnc(filePath,pair);
+        if( result.totalScore > highestScorePair.totalScore )
+        highestScorePair=result;   
+    }
+    return highestScorePair.enc as string;
+    /*
     const fileScoreByTextEnc = await Promise.all(
         Object.entries(supportedTextEncodings).map(pair=> computeScoreByTextEnc(filePath,pair)));
+      
     const highestScorePair= fileScoreByTextEnc.reduce((accum, item) => item.totalScore > accum.totalScore ? item : accum, {enc:null,totalScore:0});
-    return highestScorePair.enc;
+    return highestScorePair.enc;  */
 }
