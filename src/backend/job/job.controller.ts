@@ -33,10 +33,10 @@ export class JobsController {
 	}
 	@Get(':id')
 	getJob(@Param('id') id: string){
-		
+		return this.service.getJob(id);
 	}
 	@Get(':id/live')
-	getLiveData(@Param('id') id: string, @Query('cat') cat: string, @Query('start') start: string) {
-		return { cat, start, id };
+	getLiveData(@Param('id') id: string, @Query('cat') categoryName: string, @Query('offset')offset: string) {
+		return this.service.getLiveItems({id ,categoryName,offset:parseInt(offset || '0') || 0,limit:100})  
 	}
 }
