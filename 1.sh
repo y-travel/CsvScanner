@@ -1,0 +1,1 @@
+echo "{\"presetId\":" && http GET http://localhost:3030/presets | jq .[0].id && echo ",\"fileId\":" && http GET http://localhost:3030/files | jq .[0].id && echo "}"

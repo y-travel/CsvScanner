@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Preset>
     <Columns count="12" fields="" />
-    <Category Name="Error1" icon="warning" color="red" Limit="100">
-    <!--
-        eq : Equal
-        lt : Less Than or Equal
-        lte : Less Than or Equal
-        gte : Great Than or Equal
-        gt : Great Than
-    -->
-        <Rule sourceField="amount" functionName="lte" argv="2"    />
+    <Category Name="ErrorNationalNum" icon="warning" color="red" Limit="100">
+<!--
+    eq : Equal
+    lt : Less Than or Equal
+    lte : Less Than or Equal
+    gte : Great Than or Equal
+    gt : Great Than
+-->
+        <Rule sourceField="CUST_NATION_NUM" functionName="notInvalidNationalCode" argv="2"    />
     </Category> 
     <Category Name="Important">
         <Rule sourceField="TRN_DEBIT_AMNT" functionName="gte" argv="1_000_000_000"   />
-    <!--    <Rule sourceField="TRN_DEBIT_AMNT" functionName="lte" argv="1_000"   />
-        -->
-        <Rule sourceField="IBAN" functionName="checkIBAN"    />
-        <Rule sourceField="accountNo" functionName="regEx"   />
-   
+ 
+    </Category> 
+    <Category Name="ImportantBRANCH150">
+        <Rule sourceField="ACCT_OPEN_BRANCH_NUM" functionName="lte" argv="150"   />
+
+    </Category> 
+     <Category Name="ImportantBRANCH170">
+        <Rule sourceField="ACCT_OPEN_BRANCH_NUM" functionName="gte" argv="170"   />
+
     </Category> 
 </Preset>
     
