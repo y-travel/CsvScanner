@@ -4,36 +4,37 @@ import { Config } from '../../lib/config';
 
 import { globFiles } from '../../lib/utils';
 import * as uuid from 'uuid'
-import { CsvFile, detectFileEncoding, Preset } from '../../lib';
+import { CsvFile, detectFileEncoding, ILoadRows, Preset } from '../../lib';
 import { Job } from '../../lib';
 @Injectable()
 export class JobService {
-	jobs:Record<string,Job>={};
-	baseDir:string;
+	jobs: Record<string, Job> = {};
+	baseDir: string;
 	config: Config;
-	loadComplete:boolean = false;
+	loadComplete: boolean = false;
 	async getJobs() {
-		const jobs=			await  this.loadFiles();
-		return Object.values(   jobs).filter(Boolean).map(job=>job.data())
+		const jobs = await this.loadFiles();
+		return jobs.map(job => job.data())
 	}
+
 	deleteJob(entity: any) {
 
 	}
 	async createJob(entity: any, csvFilePath: string, presetFilePath: any) {
 		const preset = new Preset();
-		const rootDir=this.baseDir.split('/').filter(s=>!/\*/.test(s)).join('/');
+		const rootDir = this.baseDir.split('/').filter(s => !/\*/.test(s)).join('/');
 		const job = new Job(rootDir);
 		try {
 			await preset.loadFromFile(presetFilePath);
-			this.jobs[job.id] = job; 
-			job.start(csvFilePath,preset);
-			return {id:job.id}
+			this.jobs[job.id] = job;
+			job.start(csvFilePath, preset);
+			return { id: job.id }
 		} finally {
-			
+
 		}
 
 	}
-	 idByFilePath: {};
+	idByFilePath: {};
 	fileDataById: {};
 	/**
 	 *
@@ -51,21 +52,28 @@ export class JobService {
 		this.idByFilePath[filePath] = uuid.v4();
 		return this.idByFilePath[filePath];
 	}
-	async loadFiles() {
+	async loadFiles(id?: string) {
 		const files = await globFiles(this.config.jobFilePaths);
-		return  await Promise.all(files.map(async filePath => {
-			const job=new Job(path.dirname(filePath)); ;
-			await job.loadFromFile(filePath);
-			job.filePath=filePath;
-			return job;
+		return await Promise.all(files.filter(filePath => id ? filePath.includes(id) : true).map(async filePath => {
+
+			const job = new Job(path.dirname(filePath));;
+			return job.loadFromFile(filePath);
 		}));
 	}
-	getJob(  id) { 
-		const job=this.jobs[id];
+	async getJob(id) {
+		const jobs = await this.loadFiles(id);
+
+		const [job] = jobs.filter(job => job.id == id);
 		return job?.data();
 	}
-	
-	getLiveRows(csvFile){
 
+	async getLiveRows(p: ILoadRows) {
+		const jobs = await this.loadFiles(p.id);
+		const [job] = jobs.filter(job => job.id == p.id);
+		return job.liveRows(p);
+	}
+	async getLiveItems(p: ILoadRows) {
+		const lines = await this.getLiveRows(p);
+		return lines.map(line => line.split(','));
 	}
 }
