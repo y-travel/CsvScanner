@@ -23,7 +23,7 @@ export class CsvFile extends EventEmitter {
             for await (const line of scanner) {
                 if (!this.fieldNames) {
                     this.fieldNames = line.trim().split(',');
-                    this.emit('fields', this.fieldNames);
+                    this.emit('fields',{fields : this.fieldNames});
                 }
                 else {
                     const parts = line.split(',');
@@ -36,13 +36,13 @@ export class CsvFile extends EventEmitter {
                         item[this.fieldNames[i]] = parts[i];
                     }
                     this.emit('data', {item,line,parts,filePosition,lineIndex})
+                    lineIndex++;
                 }
                 filePosition +=   textEncoding.computeStringSize(line) + newLineSize;
-                lineIndex++;
             }
-            this.emit('end', {totalLines: lineIndex, filePosition,fields:this.fieldNames});
-           
+            
         } finally {
+            this.emit('end', {totalLines: lineIndex, filePosition,fields:this.fieldNames});
             scanner.close();
             fileStream.close();
         }
