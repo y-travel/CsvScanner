@@ -2,14 +2,20 @@ import { open, read, write } from "fs-extra";
 
 export class Indexer {
     fd: number;
+    counter: number;
+    filePath: string;
     /**
      *
      */
     constructor() {
-
+        this.counter=0;
     }
-    async link(filePath: string) {
-        this.fd = await open(filePath, 'w+');
+    async link(  filePath: string,flags='w+') {
+        this.filePath = filePath;
+        this.fd = await open(filePath,flags);
+    }
+    indicate(value:string){
+        return this.write(this.counter++,value);
     }
     write(index: number, value: number | string) {
         const CrLf = "\r\n";
@@ -18,12 +24,15 @@ export class Indexer {
             write(this.fd, buffer, 0, buffer.length, index * buffer.length,
                 (err, n) => err ? reject(err) : resolve(n)));
     }
-    read(index:number){    
+    read(index:number):Promise<number>{    
         const buffer=Buffer.alloc(12);
         return new Promise((resolve, reject) =>
             read(this.fd, buffer, 0, buffer.length,
                  index * buffer.length,
-                (err, n) => err ? reject(err) : resolve( parseInt(  buffer.toString().trim(),16)  )));
+                (err, n) =>{
+                    if(n==0) return resolve(-1);
+                    return err ? reject(err) : resolve( parseInt(  buffer.toString().trim(),16)  )  
+                } ));
 
     }
 
